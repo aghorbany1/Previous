@@ -14,7 +14,7 @@
     </div>
                      
   <div class="row">   
-        <div class="col-8">
+        <div class="col-9">
             <asp:Label ID="Error" runat="server" Text=""></asp:Label>
             <asp:Label ID="Label4" runat="server" Text="CoursePartialName:"></asp:Label>&nbsp;&nbsp;
             <asp:TextBox ID="CoursePartialName" runat="server"></asp:TextBox>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -22,7 +22,10 @@
                        
             <asp:Label ID="Label5" runat="server" Text="Filtered Course List:"></asp:Label>&nbsp;&nbsp;
             <asp:DropDownList ID="ClassOfferingList" runat="server" Width="100px"></asp:DropDownList>&nbsp;&nbsp;&nbsp;&nbsp;
-            <asp:Button ID="ClassOffering" runat="server" Text="Class Offerings?" OnClick="ClassOffering_Click"/> <br /><br />
+            <asp:Button ID="ClassOffering" runat="server" Text="Class Offerings?" OnClick="ClassOffering_Click"/> &nbsp;&nbsp;
+
+             <asp:DropDownList ID="OfferingList" runat="server" Width="150px"></asp:DropDownList>&nbsp;&nbsp;
+             <asp:Button ID="SelectOffering" runat="server" Text="Select Offering" OnClick="SelectOffering_Click"/>  <br />  <br />
             <br /><br />
     </div>
 
@@ -58,19 +61,7 @@
         </div>
         
 
-     <div class="col-md-12">
-             <asp:Label ID="Label6" runat="server" Text="Course:"></asp:Label>&nbsp;&nbsp;
-            <asp:TextBox ID="CourseName" runat="server"></asp:TextBox>&nbsp;&nbsp;&nbsp;&nbsp;
-            <asp:Button ID="SearchCourseList" runat="server" Text="Search" OnClick="SearchCourseList_Click" />&nbsp;&nbsp;
 
-             <asp:Label ID="Label1" runat="server" Text="Shorth-list Course:"></asp:Label>&nbsp;&nbsp;
-             <asp:DropDownList ID="CourseDropDownList" runat="server" Width="150px"></asp:DropDownList>&nbsp;&nbsp;
-             <asp:Button ID="Offerings" runat="server" Text="Offerings?" OnClick="Offerings_Click" />&nbsp;&nbsp;
-
-             <asp:DropDownList ID="OfferingList" runat="server" Width="150px"></asp:DropDownList>&nbsp;&nbsp;
-             <asp:Button ID="SelectOffering" runat="server" Text="Select Offering" OnClick="SelectOffering_Click"/>  <br />  <br />
-    </div>
-          
     <div class="col-md-10"> 
              <asp:Label ID="Label2" runat="server" Text="Employee:"></asp:Label>&nbsp;&nbsp;
             <asp:TextBox ID="EmployeeSearchTextBox" runat="server"></asp:TextBox>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -87,72 +78,7 @@
             <asp:Button ID="DeleteClass" runat="server" Text="Delete" ForeColor="Red"/>
          </div>   
 
-        <%--<asp:GridView ID="ClassOfferingView" runat="server"  AutoGenerateColumns="False"
-             CssClass="table table-striped" GridLines="Horizontal"
-             BorderStyle="None">
-
-            <Columns>
-                <asp:CommandField SelectText="Edit" ShowSelectButton="True" 
-                    ButtonType="Button" CausesValidation="false"></asp:CommandField>
-                <asp:TemplateField HeaderText="ID" Visible="true">
-                    <ItemStyle HorizontalAlign="Center"></ItemStyle>
-                    <ItemTemplate>
-                        <asp:Label ID="ClassOfferingID" runat="server" 
-                            Text='<%# Eval("ClassOfferingID") %>'></asp:Label>
-                        
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText="ProgramName">
-                    <ItemStyle HorizontalAlign="Left"></ItemStyle>
-                    <ItemTemplate>                     
-                        <asp:Label ID="ProductName" runat="server" 
-                            Text='<%# Eval("ProgramName") %>'></asp:Label>
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText="Semester">
-                    <ItemStyle HorizontalAlign="Left"></ItemStyle>
-                     <ItemTemplate>
-                        <asp:Label ID="Semester" runat="server" 
-                            Text='<%# Eval("Semester") %>'></asp:Label>                        
-                    </ItemTemplate>
-                </asp:TemplateField>
-
-                <asp:TemplateField HeaderText="SectionCode">
-                    <HeaderStyle HorizontalAlign="Right"></HeaderStyle>
-
-                    <ItemStyle HorizontalAlign="Right"></ItemStyle>
-                     <ItemTemplate>
-                        <asp:Label ID="SectionCode" runat="server" 
-                            Text='<%# Eval("SectionCode")%>'></asp:Label>                        
-                    </ItemTemplate>
-                </asp:TemplateField>
-
-                <asp:TemplateField HeaderText="CourseID">
-                    <HeaderStyle HorizontalAlign="Right"></HeaderStyle>
-
-                    <ItemStyle HorizontalAlign="Right"></ItemStyle>
-                     <ItemTemplate>
-                        <asp:Label ID="CourseID" runat="server" 
-                            Text='<%# Eval("CourseID")%>'></asp:Label>                        
-                    </ItemTemplate>
-                </asp:TemplateField>
-
-                <asp:TemplateField HeaderText="Description">
-                    <HeaderStyle HorizontalAlign="Right"></HeaderStyle>
-
-                    <ItemStyle HorizontalAlign="Right"></ItemStyle>
-                     <ItemTemplate>
-                        <asp:Label ID="Description" runat="server" 
-                            Text='<%# Eval("Description")%>'></asp:Label>                        
-                    </ItemTemplate>
-                </asp:TemplateField>
-             
-            </Columns>
-            <EmptyDataTemplate>
-                whatever message string you use is printed if there is no data to display
-            </EmptyDataTemplate>
-            <PagerSettings FirstPageText="Start" LastPageText="End" Mode="NumericFirstLast" PageButtonCount="3" />
-        </asp:GridView>--%>
+ 
 </div>
     <script src="../Scripts/bootwrap-freecode.js"></script>
 

@@ -291,29 +291,6 @@ namespace WebApp
             }
         }
 
-        protected void SearchClassOfferingList_Click(object sender, EventArgs e)
-        {
-            CourseController sysmgr = new CourseController();
-            List<Course> info = sysmgr.Courses_FindByPartialName(CoursePartialName.Text);
-
-            if (info.Count == 0)
-            {
-                errormsgs.Add("Course name not found");
-                LoadMessageDisplay(errormsgs, "alret alret-info");
-
-                BindClassOfferingList();
-            }
-            else
-            {
-                CourseDropDownList.DataSource = info;
-                CourseDropDownList.DataBind();
-                CourseDropDownList.DataSource = info;
-                CourseDropDownList.DataTextField = nameof(Course.CourseName);
-                CourseDropDownList.DataValueField = nameof(Course.CourseID);
-                CourseDropDownList.DataBind();
-                CourseDropDownList.Items.Insert(0, "select....");
-            }
-        }
 
         protected void Offerings_Click(object sender, EventArgs e)
         {
@@ -397,10 +374,8 @@ namespace WebApp
             SectionCode.Text = "";
             EmployeeLabel.Text = "";
             RoomNumber.Text = "";
-            CourseName.Text = "";
             EmployeeSearchTextBox.Text = "";
             ClassOfferingList.SelectedIndex = 0;
-            CourseDropDownList.SelectedIndex = 0;
             OfferingList.SelectedIndex = 0;
            // EmployeeDropDownList.SelectedIndex = 0;
             Cancelled.Checked = false;
