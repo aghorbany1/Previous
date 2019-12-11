@@ -131,9 +131,59 @@ namespace WebApp
             }         
         }
 
-        //******Course Bind *****
+        //******Offering Bind *****
        
+        protected void BindOfferingList()
+        {
+            try
+            {
+                ClassOfferingController sysmgr = new ClassOfferingController();
 
+                List<ClassOffering> info = null;
+                info = sysmgr.ClassOffering_List();
+
+                OfferingList.DataSource = info;
+                OfferingList.DataTextField = nameof(Course.CourseName);
+                OfferingList.DataValueField = nameof(Course.CourseID);
+                OfferingList.DataBind();
+                OfferingList.Items.Insert(0, "select...");
+            }
+            catch (Exception ex)
+            {
+                //using the specialized error handling DataList control
+                errormsgs.Add(GetInnerException(ex).ToString());
+                LoadMessageDisplay(errormsgs, "alert alert-danger");
+            }
+            //catch (DbUpdateException ex)
+            //{
+            //    UpdateException updateException = (UpdateException)ex.InnerException;
+            //    if (updateException.InnerException != null)
+            //    {
+            //        errormsgs.Add(updateException.InnerException.Message.ToString());
+            //    }
+            //    else
+            //    {
+            //        errormsgs.Add(updateException.Message);
+            //    }
+            //    LoadMessageDisplay(errormsgs, "alert alert-danger");
+            //}
+            //catch (DbEntityValidationException ex)
+            //{
+            //    foreach (var entityValidationErrors in ex.EntityValidationErrors)
+            //    {
+            //        foreach (var validationError in entityValidationErrors.ValidationErrors)
+            //        {
+            //            errormsgs.Add(validationError.ErrorMessage);
+            //        }
+            //    }
+            //    LoadMessageDisplay(errormsgs, "alert alert-danger");
+            //}
+            //catch (Exception ex)
+            //{
+            //    //errormsgs.Add(GetInnerException(ex).ToString());
+            //    LoadMessageDisplay(errormsgs, "alert alert-danger");
+            //}
+        }
 
         //**** Button_Click
         protected void SearchCourse_Click(object sender, EventArgs e)
@@ -182,15 +232,35 @@ namespace WebApp
                     ClassOfferingController sysmgr = new ClassOfferingController();
                     List<CurrentClassOffering> info = sysmgr.CurrentClassOfferings_FindByCourse(ClassOfferingList.SelectedValue);
 
-                    if (info == null)
+                    if (info.Count == 0)
+                    {
+                        errormsgs.Add("Course name not found");
+                        LoadMessageDisplay(errormsgs, "alret alret-info");
+
+                        BindClassOfferingList();
+                    }
+                    else
+                    {
+
+                    }
+                        if (info == null)
                     {
                         errormsgs.Add("Class not found");
                         LoadMessageDisplay(errormsgs, "alert alert-info");
                         Clear_Click(sender, e);
-                        BindEmployeeList();
+                       // BindEmployeeList();
                     }
                     else
                     {
+
+                        //OfferingList.DataSource = info;
+                        //OfferingList.DataBind();
+                        //OfferingList.DataSource = info;
+                        //OfferingList.DataTextField = nameof(Course.CourseName);
+                        //OfferingList.DataValueField = nameof(Course.CourseID);
+                        //OfferingList.DataBind();
+                        //OfferingList.Items.Insert(0, "select....");
+
                         ClassID.Text = info.First().ClassOfferingID.ToString();
                         //OfferingList.SelectedValue = info.OfferingID.ToString();
                         SectionCode.Text = info.First().SectionCode.ToString();
@@ -270,6 +340,7 @@ namespace WebApp
                     LoadMessageDisplay(errormsgs, "alert alert-info");
                     EmployeeDropDownList.DataSource = null;
                     EmployeeDropDownList.DataBind();
+
                 }
                 else
                 {
@@ -278,9 +349,10 @@ namespace WebApp
                         EmployeeController sysmgr = new EmployeeController();
 
                         List<Employee> info = null;
-                        info = sysmgr.Employees_FindByPartialName(EmployeeDropDownList.SelectedValue);
+                        info = sysmgr.Employee_FindById(EmployeeDropDownList.SelectedValue);
 
-                        EmployeeLabel.DataBind();
+                        //EmployeeLabel.DataBind();
+                        EmployeeDropDownList.SelectedValue = info.First().EmployeeID.ToString();
 
                     }
                     catch (Exception ex)
@@ -364,9 +436,78 @@ namespace WebApp
         protected void SelectOffering_Click(object sender, EventArgs e)
         {
 
+            if (ClassOfferingList.SelectedIndex == 0)
+            {
+                errormsgs.Add("Select a Class");
+                LoadMessageDisplay(errormsgs, "alert alert-info");
+            }
+            //if (string.IsNullOrEmpty(ClassOfferingList.Text))
+            //{
+            //    errormsgs.Add("Select Program, Course and Semester");
+            //    LoadMessageDisplay(errormsgs, "alert alert-warning");
+            //}
+            else
+            {
+                try
+                {
+                    ClassOfferingController sysmgr = new ClassOfferingController();
+                    List<CurrentOffering> info = null; sysmgr.CurrentOfferings_FindByCourse(OfferingList.SelectedValue);
+
+                    if (info == null)
+                    {
+                        errormsgs.Add("Class not found");
+                        LoadMessageDisplay(errormsgs, "alert alert-info");
+                        Clear_Click(sender, e);
+                        BindOfferingList();
+                    }
+                    else
+                    {
+                       // ClassID.Text = info.First().ClassOfferingID.ToString();
+                        OfferingID.Text = info.First().OfferingID.ToString();
+                       // SectionCode.Text = info.First().SectionCode.ToString();
+                        //EmployeeDropDownList.SelectedValue = info.EmployeeID.ToString();
+                       // RoomNumber.Text = info.First().RoomNumber.ToString();
+                       // Cancelled.Checked = info.First().Cancelled;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    errormsgs.Add(GetInnerException(ex).ToString());
+                    LoadMessageDisplay(errormsgs, "alert alert-danger");
+                }
+                //catch (DbUpdateException ex)
+                //{
+                //    UpdateException updateException = (UpdateException)ex.InnerException;
+                //    if (updateException.InnerException != null)
+                //    {
+                //        errormsgs.Add(updateException.InnerException.Message.ToString());
+                //    }
+                //    else
+                //    {
+                //        errormsgs.Add(updateException.Message);
+                //    }
+                //    LoadMessageDisplay(errormsgs, "alert alert-danger");
+                //}
+                //catch (DbEntityValidationException ex)
+                //{
+                //    foreach (var entityValidationErrors in ex.EntityValidationErrors)
+                //    {
+                //        foreach (var validationError in entityValidationErrors.ValidationErrors)
+                //        {
+                //            errormsgs.Add(validationError.ErrorMessage);
+                //        }
+                //    }
+                //    LoadMessageDisplay(errormsgs, "alert alert-danger");
+                //}
+                //catch (Exception ex)
+                //{
+                //    errormsgs.Add(GetInnerException(ex).ToString());
+                //    LoadMessageDisplay(errormsgs, "alert alert-danger");
+                //}
+            }
         }
 
-        protected void Clear_Click(object sender, EventArgs e)
+            protected void Clear_Click(object sender, EventArgs e)
         {
             CoursePartialName.Text = "";
             ClassID.Text = "";
@@ -377,7 +518,7 @@ namespace WebApp
             EmployeeSearchTextBox.Text = "";
             ClassOfferingList.SelectedIndex = 0;
             OfferingList.SelectedIndex = 0;
-           // EmployeeDropDownList.SelectedIndex = 0;
+            EmployeeDropDownList.SelectedIndex = 0;
             Cancelled.Checked = false;
         }
     }

@@ -64,5 +64,10 @@ namespace StartedSystem.BLL
         {
             throw new NotImplementedException();
         }
+
+        public List<Employee> Employee_FindById(string selectedValue)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
