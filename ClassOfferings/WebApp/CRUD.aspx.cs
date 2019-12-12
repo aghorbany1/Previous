@@ -232,23 +232,12 @@ namespace WebApp
                     ClassOfferingController sysmgr = new ClassOfferingController();
                     List<CurrentClassOffering> info = sysmgr.CurrentClassOfferings_FindByCourse(ClassOfferingList.SelectedValue);
 
-                    if (info.Count == 0)
-                    {
-                        errormsgs.Add("Course name not found");
-                        LoadMessageDisplay(errormsgs, "alret alret-info");
-
-                        BindClassOfferingList();
-                    }
-                    else
-                    {
-
-                    }
-                        if (info == null)
+                    if (info == null)
                     {
                         errormsgs.Add("Class not found");
                         LoadMessageDisplay(errormsgs, "alert alert-info");
                         Clear_Click(sender, e);
-                       // BindEmployeeList();
+                        BindOfferingList();
                     }
                     else
                     {
@@ -507,7 +496,8 @@ namespace WebApp
             }
         }
 
-            protected void Clear_Click(object sender, EventArgs e)
+        // *** CLEAR ****
+        protected void Clear_Click(object sender, EventArgs e)
         {
             CoursePartialName.Text = "";
             ClassID.Text = "";
@@ -518,8 +508,233 @@ namespace WebApp
             EmployeeSearchTextBox.Text = "";
             ClassOfferingList.SelectedIndex = 0;
             OfferingList.SelectedIndex = 0;
-            EmployeeDropDownList.SelectedIndex = 0;
+           // EmployeeDropDownList.SelectedIndex = 0;
             Cancelled.Checked = false;
+        }
+
+        //*** UPDATE ****
+        protected void UpdateClass_Click(object sender, EventArgs e)
+        {
+            if (Page.IsValid)
+            {
+                if (string.IsNullOrEmpty(ClassID.Text))
+                {
+                    errormsgs.Add("Look up the customer to be updated");
+                }
+                if(OfferingList.SelectedIndex == 0)
+                {
+                    errormsgs.Add("Select Offering");
+                }
+                if (EmployeeDropDownList.SelectedIndex == 0)
+                {
+                    errormsgs.Add("Select Employee");
+                }
+                if (errormsgs.Count() > 0)
+                {
+                    LoadMessageDisplay(errormsgs, "alert alert-info");
+                }
+                else
+                {
+                    try
+                    {
+                        ClassOffering item = new ClassOffering();
+
+                        item.ClassOfferingID = int.Parse(ClassID.Text);
+                        item.OfferingID = int.Parse(OfferingList.SelectedValue);
+                        item.SectionCode = string.IsNullOrEmpty(SectionCode.Text) ? null : SectionCode.Text;
+                        item.EmployeeID = int.Parse(EmployeeDropDownList.SelectedValue);
+                        item.RoomNumber = string.IsNullOrEmpty(RoomNumber.Text) ? null : RoomNumber.Text;
+                        item.Cancelled = false;
+
+                        ClassOfferingController sysmgr = new ClassOfferingController();
+
+                        int rowaffected = sysmgr.ClassOffering_Update(item);
+
+                        if (rowaffected == 0)
+                        {
+                            errormsgs.Add("Class no longer on file. Update not done");
+                            LoadMessageDisplay(errormsgs, "alert alert-warning");
+                        }
+                        else
+                        {
+                            errormsgs.Add("Class Updated");
+                            LoadMessageDisplay(errormsgs, "alert alert-success");
+                        }
+                        BindClassOfferingList();
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        UpdateException updateException = (UpdateException)ex.InnerException;
+                        if (updateException.InnerException != null)
+                        {
+                            errormsgs.Add(updateException.InnerException.Message.ToString());
+                        }
+                        else
+                        {
+                            errormsgs.Add(updateException.Message);
+                        }
+                        LoadMessageDisplay(errormsgs, "alert alert-danger");
+                    }
+                    catch (DbEntityValidationException ex)
+                    {
+                        foreach (var entityValidationErrors in ex.EntityValidationErrors)
+                        {
+                            foreach (var validationError in entityValidationErrors.ValidationErrors)
+                            {
+                                errormsgs.Add(validationError.ErrorMessage);
+                            }
+                        }
+                        LoadMessageDisplay(errormsgs, "alert alert-danger");
+                    }
+                    catch (Exception ex)
+                    {
+                        errormsgs.Add(GetInnerException(ex).ToString());
+                        LoadMessageDisplay(errormsgs, "alert alert-danger");
+                    }
+                }
+            }
+        }
+        
+        // *** DELETE ****
+        protected void DeleteClass_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(ClassID.Text))
+            {
+                errormsgs.Add("Look up the class to be cancelled");
+            }
+            if (errormsgs.Count() > 0)
+            {
+                LoadMessageDisplay(errormsgs, "alert alert-info");
+            }
+            else
+            {
+                try
+                {
+                    ClassOfferingController sysmgr = new ClassOfferingController();
+                    int rowaffected = sysmgr.ClassOffering_Delete(int.Parse(ClassID.Text));
+
+                    if (rowaffected == 0)
+                    {
+                        errormsgs.Add("Class no longer on file.");
+                        LoadMessageDisplay(errormsgs, "alert alert-warning");
+                    }
+                    else
+                    {
+                        errormsgs.Add("Class is cancelled");
+                        LoadMessageDisplay(errormsgs, "alert alert-success");
+                        Cancelled.Checked = true;
+                    }
+                    BindClassOfferingList();
+                }
+                catch (DbUpdateException ex)
+                {
+                    UpdateException updateException = (UpdateException)ex.InnerException;
+                    if (updateException.InnerException != null)
+                    {
+                        errormsgs.Add(updateException.InnerException.Message.ToString());
+                    }
+                    else
+                    {
+                        errormsgs.Add(updateException.Message);
+                    }
+                    LoadMessageDisplay(errormsgs, "alert alert-danger");
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    foreach (var entityValidationErrors in ex.EntityValidationErrors)
+                    {
+                        foreach (var validationError in entityValidationErrors.ValidationErrors)
+                        {
+                            errormsgs.Add(validationError.ErrorMessage);
+                        }
+                    }
+                    LoadMessageDisplay(errormsgs, "alert alert-danger");
+                }
+                catch (Exception ex)
+                {
+                    errormsgs.Add(GetInnerException(ex).ToString());
+                    LoadMessageDisplay(errormsgs, "alert alert-danger");
+                }
+            }
+        }
+
+        //*** ADD *****
+        protected void AddClass_Click(object sender, EventArgs e)
+        {
+
+            if (Page.IsValid)
+            {
+                if(string.IsNullOrEmpty(OfferingList.Text))
+                {
+                   errormsgs.Add("Look up the class to be added");
+                }
+                OfferingList.Items.Insert(0, "select...");
+
+                if (OfferingList.SelectedIndex == 0)
+                {
+                    errormsgs.Add("Look up the class to be added");
+                }
+
+                if (EmployeeDropDownList.SelectedIndex == 0)
+                {
+                    errormsgs.Add("Select Employee");
+                }
+                if (errormsgs.Count() > 0)
+                {
+                    LoadMessageDisplay(errormsgs, "alert alert-info");
+                }
+                else
+                {
+                    try
+                    {
+                        ClassOffering item = new ClassOffering();
+
+                        item.OfferingID = int.Parse(OfferingList.SelectedValue);
+                        item.SectionCode = string.IsNullOrEmpty(SectionCode.Text) ? null : SectionCode.Text;
+                        item.EmployeeID = int.Parse(EmployeeDropDownList.SelectedValue);
+                        item.RoomNumber = string.IsNullOrEmpty(RoomNumber.Text) ? null : RoomNumber.Text;
+                        item.Cancelled = false;
+
+                        ClassOfferingController sysmgr = new ClassOfferingController();
+                        int newpk = sysmgr.ClassOffering_Add(item);
+
+                        ClassID.Text = newpk.ToString();
+
+                        BindClassOfferingList();
+                        errormsgs.Add("Class has been added");
+                        LoadMessageDisplay(errormsgs, "alert alert-success");
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        UpdateException updateException = (UpdateException)ex.InnerException;
+                        if (updateException.InnerException != null)
+                        {
+                            errormsgs.Add(updateException.InnerException.Message.ToString());
+                        }
+                        else
+                        {
+                            errormsgs.Add(updateException.Message);
+                        }
+                        LoadMessageDisplay(errormsgs, "alert alert-danger");
+                    }
+                    catch (DbEntityValidationException ex)
+                    {
+                        foreach (var entityValidationErrors in ex.EntityValidationErrors)
+                        {
+                            foreach (var validationError in entityValidationErrors.ValidationErrors)
+                            {
+                                errormsgs.Add(validationError.ErrorMessage);
+                            }
+                        }
+                        LoadMessageDisplay(errormsgs, "alert alert-danger");
+                    }
+                    catch (Exception ex)
+                    {
+                        errormsgs.Add(GetInnerException(ex).ToString());
+                        LoadMessageDisplay(errormsgs, "alert alert-danger");
+                    }
+                }
+            }
         }
     }
 }

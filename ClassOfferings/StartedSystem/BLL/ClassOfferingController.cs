@@ -108,5 +108,10 @@ namespace StartedSystem.BLL
         {
             throw new NotImplementedException();
         }
+
+        public List<CurrentClassOffering> ClassOfferings_FindByCourse(string selectedValue)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
