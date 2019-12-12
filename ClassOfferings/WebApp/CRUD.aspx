@@ -73,9 +73,9 @@
               
         <div class="col-md-6"> 
              <asp:Button ID="Clear" runat="server" Text="Clear" OnClick="Clear_Click"/>&nbsp;&nbsp;
-             <asp:Button ID="AddClass" runat="server" Text="Add"/>&nbsp;&nbsp;
+             <asp:Button ID="AddClass" runat="server" Text="Add" OnClick="AddClass_Click"/>&nbsp;&nbsp;
              <asp:Button ID="UpdateClass" runat="server" Text="Update" ForeColor="Green" OnClick="UpdateClass_Click" />&nbsp;&nbsp;
-            <asp:Button ID="DeleteClass" runat="server" Text="Delete" ForeColor="Red"/>
+            <asp:Button ID="DeleteClass" runat="server" Text="Delete" ForeColor="Red" OnClick="DeleteClass_Click"/>
          </div>   
 
  
